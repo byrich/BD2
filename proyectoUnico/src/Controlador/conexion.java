@@ -30,14 +30,15 @@ public class conexion {
     
     private static conexion cone;
     private ResultSet rs;
-    private Connection conn;
+    private java.sql.Connection conn;
     private Statement stmt;
     
     private conexion() {
         try {
-            this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:byrich","byRich","24490024");
+            //this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:byrich","byRich","24490024");
             //this.conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.43.41:1522/BASESDATOS2","bd2","Basesdatos2");
-            stmt=conn.createStatement();  
+            this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1522/BASESDATOS2","bd2","Basesdatos2");
+            stmt=conn.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,6 +68,13 @@ public class conexion {
                 , pass
         );
         return runSql(sql);
+    }
+    
+    public int addChequeTemp(int cuenta, int cheque, float monto) throws SQLException {
+        Statement statement = conn.createStatement();
+        int rowsAffected = statement.executeUpdate("INSERT INTO TransaccionChequeTmp " + "VALUES (" + cuenta + ", " + cheque + ", " + monto + ")");
+        statement.close();
+        return rowsAffected;
     }
     
     // registro de cliente
